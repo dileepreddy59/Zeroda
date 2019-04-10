@@ -1,0 +1,33 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Run Script
+      local_action: command sudo sh /etc/ansible/ubuntu.sh
+    - name: Create user
+      user:
+        name: "user"
+        password: "user1"
+                comment: "Used to work with Ansible"
+                state: present
+    - name: Sets the system's timezone to "Asia/Kolkata"
+      time zone:
+        name: "Asia/Kolkata"
+    - name: Upload a random file from host
+     copy:
+        src: /etc/ansible/dileep
+         	dest: /home/testuser
+    - name: Installs python, supervisord, and the latest version of consul
+      apt: name={{ item }} state=installed
+      with_items:
+            - supervisor
+            - python-pip
+            - python3-pip
+            - consul
+     - name : installing latetst version of Consul
+       script:
+            cd /etc/ansible
+            wget https://releases.hashicorp.com/consul/1.4.4/consul_1.4.4_linux_amd64.zip
+            unzip consul_1.4.4_linux_amd64.zip
+            apt-get install consul_1.4.4_linux_amd64
+                

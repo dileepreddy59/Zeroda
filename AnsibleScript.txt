@@ -1,0 +1,28 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Start Vagrant Box
+
+    - name: Create user
+      user:
+	name: "user"
+         	comment: "Used to work with Ansible"
+         	state: present
+
+    - name: Sets the system's timezone to "Asia/Kolkata"
+      time zone:
+	name: "Asia/Kolkata"
+
+    - name: Upload a random file from host
+     copy:
+	src: /etc/ansible/dileep
+         	dest: /home/testuser
+
+    - name: Installs python, supervisord, and the latest version of consul
+      apt: name={{ item }} state=installed
+      with_items:
+    	- supervisor
+    	- python-pip
+    	- python3-pip
+    	- consul
